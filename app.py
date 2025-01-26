@@ -6,7 +6,7 @@ import json
 from google.oauth2 import service_account
 
 # Debugging: Print all secrets
-st.write("Secrets:", st.secrets)
+# st.write("Secrets:", st.secrets)
 
 # Load credentials from Streamlit secrets
 try:
