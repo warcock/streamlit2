@@ -2,16 +2,22 @@ import streamlit as st
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
+import json
+from google.oauth2 import service_account
+
+# Load credentials from Streamlit secrets
+credentials = service_account.Credentials.from_service_account_info(
+    json.loads(st.secrets["CREDENTIALS_JSON"])
+)
 
 # Step 1: Authenticate and Access Google Sheets
-def authenticate_google_sheets(credentials_file, sheet_url):
+def authenticate_google_sheets(sheet_url):
     try:
         # Define the scope
         scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
-        # Authenticate using the credentials file
-        creds = ServiceAccountCredentials.from_json_keyfile_name(credentials_file, scope)
-        client = gspread.authorize(creds)
+        # Use the credentials loaded from secrets
+        client = gspread.authorize(credentials)
 
         # Open the Google Sheet by URL
         sheet = client.open_by_url(sheet_url).sheet1  # Use the first sheet
@@ -28,16 +34,13 @@ def authenticate_google_sheets(credentials_file, sheet_url):
 def main():
     st.title("Google Sheets Data Viewer 📊")
 
-    # Path to your credentials file
-    credentials_file = st.text_input("Enter the path to your credentials file:", "C:\\Users\\USER\\Downloads\\datasheetread-449008-eba2b02e5a4b.json")
-
     # URL of your Google Sheet
     sheet_url = st.text_input("Enter the Google Sheet URL:", "https://docs.google.com/spreadsheets/d/1Gx3MO9HMlquaV2fh3w4LqF-gGbbPnkTh7-vEpB-LPvU/edit?resourcekey=&gid=2000238640#gid=2000238640")
 
     # Button to fetch and display data
     if st.button("Fetch Data"):
         # Authenticate and fetch data
-        data = authenticate_google_sheets(credentials_file, sheet_url)
+        data = authenticate_google_sheets(sheet_url)
 
         if data:
             st.success("Data fetched successfully!")
