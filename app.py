@@ -5,9 +5,6 @@ import pandas as pd
 import json
 from google.oauth2 import service_account
 
-# Debugging: Print all secrets
-# st.write("Secrets:", st.secrets)
-
 # Load credentials from Streamlit secrets
 try:
     credentials = service_account.Credentials.from_service_account_info(
