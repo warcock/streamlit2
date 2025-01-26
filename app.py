@@ -3,15 +3,16 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 import json
-from google.oauth2 import service_account  # Import the correct module
+from google.oauth2 import service_account
 
 # Debugging: Print all secrets
-# st.write("Secrets:", st.secrets)
+st.write("Secrets:", st.secrets)
 
 # Load credentials from Streamlit secrets
 try:
     credentials = service_account.Credentials.from_service_account_info(
-        json.loads(st.secrets["CREDENTIALS_JSON"])
+        json.loads(st.secrets["CREDENTIALS_JSON"]),
+        scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
     )
     st.success("Credentials loaded successfully!")
 except KeyError:
